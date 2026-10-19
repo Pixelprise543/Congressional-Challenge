@@ -1,0 +1,16 @@
+name: Import External Events
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:        # Manual trigger button
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Import events for all users
+        run: |
+          curl -s -X POST "${{ secrets.SUPABASE_URL }}/functions/v1/import-events-cron" \
+            -H "Authorization: Bearer ${{ secrets.SERVICE_ROLE_KEY }}" \
+            -H "Content-Type: application/json"
